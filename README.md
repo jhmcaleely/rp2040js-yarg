@@ -31,6 +31,14 @@ yarg>
 
 Use "Ctrl+X", then Enter to exit from the simulator.
 
+### Alternative images
+
+Supply an alternative Yarg image:
+
+```
+npm start -- --image relative/path/to/a/image.uf2
+```
+
 ## GDB Server
 
 The simulator listens for GDB connections on port 3333. Use the following command to connect the GDB debugger to the simulator:

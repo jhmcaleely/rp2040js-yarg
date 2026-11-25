@@ -2,12 +2,18 @@ const { RP2040, ConsoleLogger, LogLevel, USBCDC, Simulator } = require('rp2040js
 const { loadUF2 } = require('./load-uf2');
 const { bootromB1 } = require('./bootrom');
 const { GDBTCPServer } = require('rp2040js/gdb-tcp-server');
+const { parseArgs } = require('node:util');
 
 const simulator = new Simulator();
 const mcu = simulator.rp2040;
 mcu.loadBootrom(bootromB1);
 mcu.logger = new ConsoleLogger(LogLevel.Error);
-loadUF2('firmware/yarg-lang-pico-v0.5.0.uf2', mcu);
+
+const args = parseArgs({
+  options: { image: { type: 'string' } },
+});
+const imagename = args.values.image ?? 'firmware/yarg-lang-pico-v0.5.0.uf2';
+loadUF2(imagename, mcu);
 
 const cdc = new USBCDC(mcu.usbCtrl);
 cdc.onSerialData = (value) => {
