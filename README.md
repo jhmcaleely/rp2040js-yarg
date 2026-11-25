@@ -1,11 +1,13 @@
-# CircuitPython Command-line Simulator
+# Yarg Pico Command-line Simulator
 
-A simple CircuitPython on Raspberry Pi Pico simulator, built on top of the [rp2040js](https://github.com/wokwi/rp2040js) library.
+A simple Yarg on Raspberry Pi Pico simulator, built on top of the [rp2040js](https://github.com/wokwi/rp2040js) library.
 
-You can use this simulator to run the release firmware of CircuitPython on your computer, even if you
-don't have access to the physical hardware. You can use it for automated testing (e.g. in a CI environment), as well as for educational purposes.
+You can use this simulator to run the release firmware of Yarg on your computer, even if you don't have access to the physical hardware.
 
-If you are looking for a full-blown, user friendly CircuitPython simulator, please check out [Wokwi](https://wokwi.com): Start a [new CircuitPython project on Wokwi](https://wokwi.com/arduino/new?template=circuitpython-pi-pico).
+If you are looking for upstream, please check out:
+
+ -  [Wokwi](https://wokwi.com): The underlying Simulator. Supports many MCUs and Languages
+ - [Yarg-Lang](https://yarg-lang.dev): The Yarg Language, a dynamic programming language for microcontroller firmware.
 
 ## Usage
 
@@ -19,17 +21,15 @@ npm start
 To run the simulator. You should see output similar to this:
 
 ```
-Starting CircuitPython simulator. Press Ctrl+X to exit.
-Auto-reload is off.
-Running in safe mode! Not running saved code.
+> rp2040js-yarg@1.0.0 start
+> node src/index.js
 
-You are in safe mode because:
-You pressed the reset button during boot. Press again to exit safe mode.
-
-Press any key to enter the REPL. Use CTRL-D to reload.
+Starting Yarg Pico simulator. Press Ctrl+X then Enter to exit.
+GDB server listening on TCP port 3333
+yarg>
 ```
 
-Then type any key (e.g. enter) to get into the REPL. Use "Ctrl+X" to exit from the simulator, Ctrl+E to go into paste mode, and Ctrl+D to soft-restart CircuitPython.
+Use "Ctrl+X", then Enter to exit from the simulator.
 
 ## GDB Server
 
@@ -41,6 +41,4 @@ target remote localhost:3333
 
 You can change the port number by setting the `GDB_PORT` environment variable.
 
-## License
-
-Copyright (C) 2021 Uri Shaked. Released under the MIT license.
+This is untested in yarg.

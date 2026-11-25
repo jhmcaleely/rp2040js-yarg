@@ -1,19 +1,22 @@
-const { RP2040, ConsoleLogger, LogLevel, USBCDC } = require('rp2040js');
+const { RP2040, ConsoleLogger, LogLevel, USBCDC, Simulator } = require('rp2040js');
 const { loadUF2 } = require('./load-uf2');
 const { bootromB1 } = require('./bootrom');
 const { GDBTCPServer } = require('rp2040js/gdb-tcp-server');
 
-const mcu = new RP2040();
+const simulator = new Simulator();
+const mcu = simulator.rp2040;
 mcu.loadBootrom(bootromB1);
 mcu.logger = new ConsoleLogger(LogLevel.Error);
-loadUF2('firmware/adafruit-circuitpython-raspberry_pi_pico-en_US-7.0.0-rc.1.uf2', mcu);
+loadUF2('firmware/yarg-lang-pico-v0.5.0.uf2', mcu);
 
 const cdc = new USBCDC(mcu.usbCtrl);
 cdc.onSerialData = (value) => {
   process.stdout.write(value);
 };
 
-process.stdin.setRawMode(true);
+// Yarg's current repl doesn't like raw mode, so we leave it commented out.
+//process.stdin.setRawMode(true);
+
 process.stdin.on('data', (chunk) => {
   // 24 is Ctrl+X
   if (chunk[0] === 24) {
@@ -30,7 +33,7 @@ mcu.sramView.setUint32(0x40000, 0xad0005af, true);
 // Configure GDB
 const gdbServer = new GDBTCPServer(mcu, process.env.GDB_PORT || 3333);
 
-console.log('Starting CircuitPython simulator. Press Ctrl+X to exit.');
+console.log('Starting Yarg Pico simulator. Press Ctrl+X then Enter to exit.');
 console.log(`GDB server listening on TCP port ${gdbServer.port}`);
-mcu.PC = 0x10000000;
-mcu.execute();
+mcu.core.PC = 0x10000000;
+simulator.execute();
